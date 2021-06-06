@@ -1,24 +1,24 @@
-using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
-using Microsoft.OpenApi.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-
 namespace Searchinator
 {
+    using Microsoft.AspNetCore.Builder;
+    using Microsoft.AspNetCore.Hosting;
+    using Microsoft.Extensions.Configuration;
+    using Microsoft.Extensions.DependencyInjection;
+    using Microsoft.Extensions.Hosting;
+    using Microsoft.OpenApi.Models;
+
+    using Searchinator.Configuration;
+    using Searchinator.EntityFramework;
+    using Searchinator.Repositories;
+
     public class Startup
     {
+        private readonly SearchinatorConfigurationManager searchinatorConfigurationManager;
+
         public Startup(IConfiguration configuration)
         {
-            Configuration = configuration;
+            this.Configuration = configuration;
+            this.searchinatorConfigurationManager = new SearchinatorConfigurationManager(configuration);
         }
 
         public IConfiguration Configuration { get; }
@@ -26,12 +26,13 @@ namespace Searchinator
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-
             services.AddControllers();
-            services.AddSwaggerGen(c =>
-            {
-                c.SwaggerDoc("v1", new OpenApiInfo { Title = "Searchinator", Version = "v1" });
-            });
+            services.AddSwaggerGen(
+                c => { c.SwaggerDoc("v1", new OpenApiInfo { Title = "Searchinator", Version = "v1" }); });
+
+            services.AddSingleton<ISearchinatorConfiguration>(this.searchinatorConfigurationManager);
+            services.AddTransient<ISearchinatorContextFactory, SearchinatorContextFactory>();
+            services.AddTransient<IPersonRepository, PersonRepository>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -50,10 +51,7 @@ namespace Searchinator
 
             app.UseAuthorization();
 
-            app.UseEndpoints(endpoints =>
-            {
-                endpoints.MapControllers();
-            });
+            app.UseEndpoints(endpoints => { endpoints.MapControllers(); });
         }
     }
 }
