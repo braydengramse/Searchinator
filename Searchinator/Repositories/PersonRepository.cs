@@ -11,11 +11,16 @@ namespace Searchinator.Repositories
 
     public class PersonRepository : IPersonRepository
     {
+        private readonly IInterestRepository interestRepository;
+
         private readonly ISearchinatorContextFactory searchinatorContextFactory;
 
-        public PersonRepository(ISearchinatorContextFactory searchinatorContextFactory)
+        public PersonRepository(
+            ISearchinatorContextFactory searchinatorContextFactory,
+            IInterestRepository interestRepository)
         {
             this.searchinatorContextFactory = searchinatorContextFactory;
+            this.interestRepository = interestRepository;
         }
 
         public IList<Person> GetPeople()
@@ -56,6 +61,13 @@ namespace Searchinator.Repositories
         public void DeletePerson(int personId)
         {
             using var context = this.searchinatorContextFactory.GetSearchinatorContext();
+            var interests = this.interestRepository.GetInterests().Where(i => i.Person.Id == personId);
+
+            foreach (var interest in interests)
+            {
+                this.interestRepository.DeleteInterest(interest.Id);
+            }
+
             var person = context.People.Include(p => p.Interests).FirstOrDefault(p => p.Id == personId);
 
             if (person is null)

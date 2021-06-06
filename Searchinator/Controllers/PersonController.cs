@@ -1,7 +1,5 @@
 namespace Searchinator.Controllers
 {
-    using System.Linq;
-
     using Microsoft.AspNetCore.Mvc;
 
     using Searchinator.Models;
