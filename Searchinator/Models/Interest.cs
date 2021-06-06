@@ -8,5 +8,8 @@ namespace Searchinator.Models
 
         [Required]
         public string Description { get; set; }
+
+        [Required]
+        public virtual Person Person { get; set; }
     }
 }

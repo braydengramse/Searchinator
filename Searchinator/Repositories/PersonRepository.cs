@@ -27,7 +27,7 @@ namespace Searchinator.Repositories
         public Person? GetPerson(int personId)
         {
             using var context = this.searchinatorContextFactory.GetSearchinatorContext();
-            return context.People.FirstOrDefault(p => p.Id == personId);
+            return context.People.Include(p => p.Interests).FirstOrDefault(p => p.Id == personId);
         }
 
         public void AddPerson(Person person)
@@ -48,14 +48,15 @@ namespace Searchinator.Repositories
                         || p.Age.ToString(CultureInfo.InvariantCulture)
                             .Contains(searchInput, StringComparison.OrdinalIgnoreCase)
                         || p.Address.Contains(searchInput, StringComparison.OrdinalIgnoreCase)
-                        || p.Interests.Any(i => i.Description.Contains(searchInput, StringComparison.OrdinalIgnoreCase)))
+                        || p.Interests.Any(
+                            i => i.Description.Contains(searchInput, StringComparison.OrdinalIgnoreCase)))
                 .ToList();
         }
 
         public void DeletePerson(int personId)
         {
             using var context = this.searchinatorContextFactory.GetSearchinatorContext();
-            var person = this.GetPerson(personId);
+            var person = context.People.Include(p => p.Interests).FirstOrDefault(p => p.Id == personId);
 
             if (person is null)
             {
@@ -63,6 +64,7 @@ namespace Searchinator.Repositories
             }
 
             context.Remove(person);
+            context.SaveChanges();
         }
     }
 }

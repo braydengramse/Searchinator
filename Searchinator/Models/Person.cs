@@ -14,6 +14,6 @@ namespace Searchinator.Models
 
         public int Age { get; set; }
 
-        public ICollection<Interest> Interests { get; set; } = new List<Interest>();
+        public virtual ICollection<Interest> Interests { get; set; } = new List<Interest>();
     }
 }
