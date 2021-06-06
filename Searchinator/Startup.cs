@@ -11,6 +11,7 @@ namespace Searchinator
 
     using Searchinator.Configuration;
     using Searchinator.EntityFramework;
+    using Searchinator.Middleware;
     using Searchinator.Repositories;
 
     public class Startup
@@ -33,9 +34,7 @@ namespace Searchinator
             services.AddSwaggerGen(
                 c => { c.SwaggerDoc("v1", new OpenApiInfo { Title = "Searchinator", Version = "v1" }); });
 
-            services.AddSingleton<ISearchinatorConfiguration>(this.searchinatorConfigurationManager);
-            services.AddTransient<ISearchinatorContextFactory, SearchinatorContextFactory>();
-            services.AddTransient<IPersonRepository, PersonRepository>();
+            this.ConfigureSearchinatorServices(services);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -46,6 +45,7 @@ namespace Searchinator
                 app.UseDeveloperExceptionPage();
                 app.UseSwagger();
                 app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "Searchinator v1"));
+                app.UseMiddleware<SimulatedLatencyMiddleware>();
             }
 
             app.UseHttpsRedirection();
@@ -55,6 +55,14 @@ namespace Searchinator
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints => { endpoints.MapControllers(); });
+        }
+
+        private void ConfigureSearchinatorServices(IServiceCollection services)
+        {
+            services.AddSingleton<ISearchinatorConfiguration>(this.searchinatorConfigurationManager);
+            services.AddTransient<ISearchinatorContextFactory, SearchinatorContextFactory>();
+            services.AddTransient<IPersonRepository, PersonRepository>();
+            services.AddTransient<IInterestRepository, InterestRepository>();
         }
     }
 }
