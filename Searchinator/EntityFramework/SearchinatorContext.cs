@@ -1,5 +1,6 @@
 namespace Searchinator.EntityFramework
 {
+    using System;
     using System.Data.Entity;
     using System.Linq;
 
@@ -11,7 +12,10 @@ namespace Searchinator.EntityFramework
             : base(connectionString)
         {
             this.Configuration.LazyLoadingEnabled = false;
-            Database.SetInitializer(new SearchinatorDatabaseInitializer());
+            if (!connectionString.Contains("SearchinatorTests", StringComparison.OrdinalIgnoreCase))
+            {
+                Database.SetInitializer(new SearchinatorDatabaseInitializer());
+            }
         }
 
         public DbSet<Person> PeopleSet { get; set; }

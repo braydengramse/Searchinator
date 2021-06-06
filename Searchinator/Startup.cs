@@ -9,10 +9,9 @@ namespace Searchinator
 
     using Newtonsoft.Json;
 
+    using Searchinator.Bootstrapping;
     using Searchinator.Configuration;
-    using Searchinator.EntityFramework;
     using Searchinator.Middleware;
-    using Searchinator.Repositories;
 
     public class Startup
     {
@@ -34,7 +33,7 @@ namespace Searchinator
             services.AddSwaggerGen(
                 c => { c.SwaggerDoc("v1", new OpenApiInfo { Title = "Searchinator", Version = "v1" }); });
 
-            this.ConfigureSearchinatorServices(services);
+            services.AddSearchinator(this.searchinatorConfigurationManager);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -55,14 +54,6 @@ namespace Searchinator
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints => { endpoints.MapControllers(); });
-        }
-
-        private void ConfigureSearchinatorServices(IServiceCollection services)
-        {
-            services.AddSingleton<ISearchinatorConfiguration>(this.searchinatorConfigurationManager);
-            services.AddTransient<ISearchinatorContextFactory, SearchinatorContextFactory>();
-            services.AddTransient<IPersonRepository, PersonRepository>();
-            services.AddTransient<IInterestRepository, InterestRepository>();
         }
     }
 }
