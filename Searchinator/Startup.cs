@@ -7,6 +7,8 @@ namespace Searchinator
     using Microsoft.Extensions.Hosting;
     using Microsoft.OpenApi.Models;
 
+    using Newtonsoft.Json;
+
     using Searchinator.Configuration;
     using Searchinator.EntityFramework;
     using Searchinator.Repositories;
@@ -26,7 +28,8 @@ namespace Searchinator
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddControllers();
+            services.AddControllers()
+                .AddNewtonsoftJson(o => o.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore);
             services.AddSwaggerGen(
                 c => { c.SwaggerDoc("v1", new OpenApiInfo { Title = "Searchinator", Version = "v1" }); });
 
