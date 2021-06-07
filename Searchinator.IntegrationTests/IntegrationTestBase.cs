@@ -1,6 +1,7 @@
 namespace Searchinator.IntegrationTests
 {
     using System;
+    using System.Diagnostics;
 
     using AutoFixture;
 
@@ -33,6 +34,17 @@ namespace Searchinator.IntegrationTests
         {
             var config = new ConfigurationBuilder().AddJsonFile("appsettings.test.json").Build();
             return new SearchinatorConfigurationManager(config);
+        }
+
+        [OneTimeTearDown]
+        public void FixtureTearDown()
+        {
+            using var process = Process.Start("sqllocaldb", "stop MSSQLLocalDB");
+            if (process is null)
+            {
+                throw new InvalidOperationException("Command to stop localdb didn't produce a process.");
+            }
+            process.WaitForExit();
         }
     }
 }

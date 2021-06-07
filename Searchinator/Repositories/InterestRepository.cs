@@ -1,6 +1,7 @@
 namespace Searchinator.Repositories
 {
     using System.Collections.Generic;
+    using System.Data.Entity;
     using System.Linq;
 
     using Searchinator.Entities;
@@ -33,7 +34,17 @@ namespace Searchinator.Repositories
         public IList<Interest> GetInterestsForPerson(int personId)
         {
             using var context = this.searchinatorContextFactory.GetSearchinatorContext();
-            return context.Interests.Where(i => i.PersonEntity.Id == personId).ToList().Select(this.ToModel).ToList();
+            return context.Interests.Include(i => i.PersonEntity)
+                .Where(i => i.PersonEntity.Id == personId)
+                .ToList()
+                .Select(this.ToModel)
+                .ToList();
+        }
+
+        public IList<Interest> GetInterests()
+        {
+            using var context = this.searchinatorContextFactory.GetSearchinatorContext();
+            return context.Interests.Include(i => i.PersonEntity).ToList().Select(this.ToModel).ToList();
         }
 
         public Interest SaveInterest(Interest interest, PersonEntity personEntity)

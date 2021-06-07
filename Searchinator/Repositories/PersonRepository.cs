@@ -84,7 +84,7 @@ namespace Searchinator.Repositories
         public Person SavePerson(Person person)
         {
             using var context = this.searchinatorContextFactory.GetSearchinatorContext();
-            var personEntity = this.GetPersonEntity(person.Id);
+            var personEntity = context.People.FirstOrDefault(p => p.Id == person.Id);
 
             var entityToSave = personEntity ?? new PersonEntity();
             entityToSave.Id = person.Id;

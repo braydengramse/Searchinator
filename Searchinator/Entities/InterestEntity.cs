@@ -1,7 +1,9 @@
 namespace Searchinator.Entities
 {
     using System.ComponentModel.DataAnnotations;
+    using System.ComponentModel.DataAnnotations.Schema;
 
+    [Table("Interest")]
     public class InterestEntity
     {
         public int Id { get; set; }

@@ -1,8 +1,9 @@
 namespace Searchinator.Entities
 {
-    using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
+    using System.ComponentModel.DataAnnotations.Schema;
 
+    [Table("Person")]
     public class PersonEntity
     {
         public int Id { get; set; }

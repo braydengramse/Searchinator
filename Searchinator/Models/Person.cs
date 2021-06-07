@@ -1,7 +1,5 @@
 namespace Searchinator.Models
 {
-    using System.Collections.Generic;
-
     public class Person
     {
         public int Id { get; set; }

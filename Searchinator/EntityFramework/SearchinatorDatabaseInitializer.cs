@@ -10,8 +10,6 @@ namespace Searchinator.EntityFramework
         protected override void Seed(SearchinatorContext context)
         {
             var vivintSmartHomeArenaAddress = "301 S Temple, Salt Lake City, UT 84101";
-            var basketballInterestDescription = "playing basketball";
-            var nbaFinalsInterestDescription = "winning the NBA finals";
 
             var people = new List<PersonEntity>
             {
@@ -25,6 +23,8 @@ namespace Searchinator.EntityFramework
             context.PeopleSet.AddRange(people);
             context.SaveChanges();
 
+            var basketballInterestDescription = "playing basketball";
+            var nbaFinalsInterestDescription = "winning the NBA finals";
             var interests = new List<InterestEntity>();
 
             foreach (var personEntity in people)
