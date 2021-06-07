@@ -225,6 +225,7 @@ blank_lines_around_region = 1
 [*.cs]
 
 dotnet_diagnostic.CA1062.severity = none # Validate arguments of public methods
+dotnet_diagnostic.CA1822.severity = none # Mark members as static
 dotnet_diagnostic.CA2007.severity = none # Consider calling ConfigureAwait on the awaited task
 dotnet_diagnostic.CA2227.severity = none # Collection properties should be read only
 dotnet_diagnostic.IDE0007.severity = none # 'var' preferences

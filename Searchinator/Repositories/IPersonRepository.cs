@@ -2,6 +2,7 @@ namespace Searchinator.Repositories
 {
     using System.Collections.Generic;
 
+    using Searchinator.Entities;
     using Searchinator.Models;
 
     public interface IPersonRepository
@@ -9,8 +10,10 @@ namespace Searchinator.Repositories
         IList<Person> GetPeople();
 
         Person? GetPerson(int personId);
-        
-        void AddPerson(Person person);
+
+        PersonEntity? GetPersonEntity(int personId);
+
+        Person SavePerson(Person person);
 
         IList<Person> SearchPeople(string searchInput);
 

@@ -6,6 +6,8 @@ namespace Searchinator.Middleware
 
     using Microsoft.AspNetCore.Http;
 
+    using Searchinator.Configuration;
+
     public class SimulatedLatencyMiddleware
     {
         private readonly RequestDelegate next;
@@ -19,8 +21,15 @@ namespace Searchinator.Middleware
             "Security",
             "CA5394:Do not use insecure randomness",
             Justification = "The randomness being used is not for security.")]
-        public async Task Invoke(HttpContext context)
+        public async Task Invoke(HttpContext context, ISearchinatorConfiguration searchinatorConfiguration)
         {
+            if (searchinatorConfiguration.ConnectionString.Contains(
+                "SearchinatorTests",
+                StringComparison.OrdinalIgnoreCase))
+            {
+                await this.next(context);
+            }
+
             var random = new Random();
             var randomDelay = random.Next(500, 5000);
             await Task.Delay(randomDelay);

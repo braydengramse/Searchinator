@@ -40,17 +40,11 @@ namespace Searchinator.Controllers
 
         [Route("")]
         [HttpPost]
-        public IActionResult AddPerson(Person person)
+        [HttpPut]
+        public IActionResult SavePerson(Person person)
         {
-            if (person.Id != 0)
-            {
-                return this.BadRequest($"Unable to add a person if person is already assigned an id of {person.Id}");
-            }
-
-            this.personRepository.AddPerson(person);
-
-            // TODO: Check to make sure id is now populated
-            return this.Ok(person);
+            var savedPerson = this.personRepository.SavePerson(person);
+            return this.Ok(savedPerson);
         }
 
         [Route("search/{searchInput}")]

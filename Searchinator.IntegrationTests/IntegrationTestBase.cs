@@ -27,7 +27,6 @@ namespace Searchinator.IntegrationTests
             this.ServiceProvider = services.BuildServiceProvider();
 
             this.Fixture = new Fixture();
-
         }
 
         private SearchinatorConfigurationManager GetSearchinatorConfigurationManager()

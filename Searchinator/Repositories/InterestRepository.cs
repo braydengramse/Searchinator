@@ -1,9 +1,9 @@
 namespace Searchinator.Repositories
 {
     using System.Collections.Generic;
-    using System.Data.Entity;
     using System.Linq;
 
+    using Searchinator.Entities;
     using Searchinator.EntityFramework;
     using Searchinator.Models;
 
@@ -14,19 +14,6 @@ namespace Searchinator.Repositories
         public InterestRepository(ISearchinatorContextFactory searchinatorContextFactory)
         {
             this.searchinatorContextFactory = searchinatorContextFactory;
-        }
-
-        public IList<Interest> GetInterests()
-        {
-            using var context = this.searchinatorContextFactory.GetSearchinatorContext();
-            return context.Interests.Include(i => i.Person).ToList();
-        }
-
-        public void AddInterest(Interest interest)
-        {
-            using var context = this.searchinatorContextFactory.GetSearchinatorContext();
-            context.Add(interest);
-            context.SaveChanges();
         }
 
         public void DeleteInterest(int interestId)
@@ -41,6 +28,38 @@ namespace Searchinator.Repositories
 
             context.Remove(interest);
             context.SaveChanges();
+        }
+
+        public IList<Interest> GetInterestsForPerson(int personId)
+        {
+            using var context = this.searchinatorContextFactory.GetSearchinatorContext();
+            return context.Interests.Where(i => i.PersonEntity.Id == personId).ToList().Select(this.ToModel).ToList();
+        }
+
+        public Interest SaveInterest(Interest interest, PersonEntity personEntity)
+        {
+            using var context = this.searchinatorContextFactory.GetSearchinatorContext();
+            var interestEntity = context.Interests.FirstOrDefault(i => i.Id == interest.Id);
+
+            var entityToSave = interestEntity ?? new InterestEntity();
+            entityToSave.Id = interest.Id;
+            entityToSave.Description = interest.Description;
+            entityToSave.PersonEntity = personEntity;
+
+            var savedInterestEntity = interestEntity is null ? context.Add(entityToSave) : entityToSave;
+            
+            context.SaveChanges();
+            return this.ToModel(savedInterestEntity);
+        }
+
+        private Interest ToModel(InterestEntity interestEntity)
+        {
+            return new()
+            {
+                Id = interestEntity.Id,
+                Description = interestEntity.Description,
+                PersonId = interestEntity.PersonEntity.Id
+            };
         }
     }
 }

@@ -3,13 +3,13 @@ namespace Searchinator.EntityFramework
     using System;
     using System.Linq;
 
-    using Searchinator.Models;
+    using Searchinator.Entities;
 
     public interface ISearchinatorContext : IDisposable
     {
-        IQueryable<Person> People { get; }
+        IQueryable<PersonEntity> People { get; }
 
-        IQueryable<Interest> Interests { get; }
+        IQueryable<InterestEntity> Interests { get; }
 
         TEntity Add<TEntity>(TEntity entity)
             where TEntity : class;

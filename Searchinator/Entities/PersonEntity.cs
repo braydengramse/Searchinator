@@ -1,11 +1,13 @@
-namespace Searchinator.Models
+namespace Searchinator.Entities
 {
     using System.Collections.Generic;
+    using System.ComponentModel.DataAnnotations;
 
-    public class Person
+    public class PersonEntity
     {
         public int Id { get; set; }
 
+        [Required]
         public string Name { get; set; }
 
         public string Address { get; set; }
