@@ -122,6 +122,27 @@ namespace Searchinator.IntegrationTests.Repositories
             searchResults.Should().BeEquivalentTo(peopleSeed);
         }
 
+        [Test]
+        public void ShouldDeletePersonAndAssociatedInterests()
+        {
+            // Arrange
+            var person = this.Fixture.Create<Person>();
+            var savedPerson = this.PersonRepository.SavePerson(person);
+            var interests = new List<Interest> { this.Fixture.Create<Interest>(), this.Fixture.Create<Interest>() };
+            foreach (var interest in interests)
+            {
+                interest.PersonId = savedPerson.Id;
+            }
+            var savedInterests = interests.Select(this.InterestRepository.SaveInterest);
+
+            // Act
+            this.PersonRepository.DeletePerson(savedPerson.Id);
+
+            // Assert
+            this.InterestRepository.GetInterestsForPerson(savedPerson.Id).Should().BeEmpty();
+            this.PersonRepository.GetPerson(savedPerson.Id).Should().BeNull();
+        }
+
         private IReadOnlyCollection<Person> AddAndRetrievePeopleSeed()
         {
             var vivintSmartHomeArenaAddress = "301 S Temple, Salt Lake City, UT 84101";

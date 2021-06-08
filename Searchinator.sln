@@ -12,9 +12,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{08F7A013-FDBD-4036-B059-97CE8B1250BA}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Searchinator.IntegrationTests", "Searchinator.IntegrationTests\Searchinator.IntegrationTests.csproj", "{E1217F3A-E973-4746-9AB1-81029DD64855}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Searchinator.UnitTests", "Searchinator.UnitTests\Searchinator.UnitTests.csproj", "{B4E977E2-CF99-4D2C-9F23-43EB2E4469E8}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Searchinator.IntegrationTests", "Searchinator.IntegrationTests\Searchinator.IntegrationTests.csproj", "{E1217F3A-E973-4746-9AB1-81029DD64855}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -30,17 +28,12 @@ Global
 		{E1217F3A-E973-4746-9AB1-81029DD64855}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E1217F3A-E973-4746-9AB1-81029DD64855}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E1217F3A-E973-4746-9AB1-81029DD64855}.Release|Any CPU.Build.0 = Release|Any CPU
-		{B4E977E2-CF99-4D2C-9F23-43EB2E4469E8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{B4E977E2-CF99-4D2C-9F23-43EB2E4469E8}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{B4E977E2-CF99-4D2C-9F23-43EB2E4469E8}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{B4E977E2-CF99-4D2C-9F23-43EB2E4469E8}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{E1217F3A-E973-4746-9AB1-81029DD64855} = {08F7A013-FDBD-4036-B059-97CE8B1250BA}
-		{B4E977E2-CF99-4D2C-9F23-43EB2E4469E8} = {08F7A013-FDBD-4036-B059-97CE8B1250BA}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {FF310FB1-083C-4FA7-BFCF-2B7AAE4C8296}

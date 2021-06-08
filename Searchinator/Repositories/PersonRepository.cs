@@ -30,15 +30,10 @@ namespace Searchinator.Repositories
             return context.People.ToList().Select(this.ToModel).ToList();
         }
 
-        public PersonEntity? GetPersonEntity(int personId)
-        {
-            using var context = this.searchinatorContextFactory.GetSearchinatorContext();
-            return context.People.FirstOrDefault(p => p.Id == personId);
-        }
-
         public Person? GetPerson(int personId)
         {
-            var personEntity = this.GetPersonEntity(personId);
+            using var context = this.searchinatorContextFactory.GetSearchinatorContext();
+            var personEntity = context.People.FirstOrDefault(p => p.Id == personId);
             return personEntity is null ? null : this.ToModel(personEntity);
         }
 

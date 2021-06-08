@@ -11,8 +11,6 @@ namespace Searchinator.Repositories
 
         Person? GetPerson(int personId);
 
-        PersonEntity? GetPersonEntity(int personId);
-
         Person SavePerson(Person person);
 
         IList<Person> SearchPeople(string searchInput);
