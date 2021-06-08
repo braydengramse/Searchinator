@@ -11,12 +11,9 @@ namespace Searchinator.Controllers
     {
         private readonly IInterestRepository interestRepository;
 
-        private readonly IPersonRepository personRepository;
-
-        public InterestController(IInterestRepository interestRepository, IPersonRepository personRepository)
+        public InterestController(IInterestRepository interestRepository)
         {
             this.interestRepository = interestRepository;
-            this.personRepository = personRepository;
         }
 
         [Route("")]
@@ -24,14 +21,7 @@ namespace Searchinator.Controllers
         [HttpPut]
         public IActionResult SaveInterest(Interest interest)
         {
-            var personEntity = this.personRepository.GetPersonEntity(interest.PersonId);
-
-            if (personEntity is null)
-            {
-                return this.BadRequest("Unable to add interest if interest is not linked to a person.");
-            }
-
-            var savedInterest = this.interestRepository.SaveInterest(interest, personEntity);
+            var savedInterest = this.interestRepository.SaveInterest(interest);
             return this.Ok(savedInterest);
         }
     }

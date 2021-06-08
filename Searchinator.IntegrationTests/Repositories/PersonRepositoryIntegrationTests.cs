@@ -150,16 +150,9 @@ namespace Searchinator.IntegrationTests.Repositories
                     new() { Description = nbaFinalsInterestDescription, PersonId = person.Id }
                 };
 
-                var personEntity = this.PersonRepository.GetPersonEntity(person.Id);
-
-                if (personEntity is null)
-                {
-                    throw new InvalidOperationException($"Person entity not found for person id {person.Id}.");
-                }
-
                 foreach (var interest in interestsToAdd)
                 {
-                    var interestFromDatabase = this.InterestRepository.SaveInterest(interest, personEntity);
+                    this.InterestRepository.SaveInterest(interest);
                 }
             }
         }

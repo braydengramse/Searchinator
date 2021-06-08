@@ -1,5 +1,6 @@
 namespace Searchinator.Repositories
 {
+    using System;
     using System.Collections.Generic;
     using System.Data.Entity;
     using System.Linq;
@@ -47,9 +48,17 @@ namespace Searchinator.Repositories
             return context.Interests.Include(i => i.PersonEntity).ToList().Select(this.ToModel).ToList();
         }
 
-        public Interest SaveInterest(Interest interest, PersonEntity personEntity)
+        public Interest SaveInterest(Interest interest)
         {
             using var context = this.searchinatorContextFactory.GetSearchinatorContext();
+            var personEntity = context.People.FirstOrDefault(p => p.Id == interest.PersonId);
+
+            if (personEntity is null)
+            {
+                throw new InvalidOperationException("Unable to add interest if interest is not linked to a person.");
+            }
+
+
             var interestEntity = context.Interests.FirstOrDefault(i => i.Id == interest.Id);
 
             var entityToSave = interestEntity ?? new InterestEntity();

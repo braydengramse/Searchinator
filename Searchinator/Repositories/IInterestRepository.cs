@@ -11,7 +11,7 @@ namespace Searchinator.Repositories
 
         IList<Interest> GetInterests();
 
-        Interest SaveInterest(Interest interest, PersonEntity personEntity);
+        Interest SaveInterest(Interest interest);
 
         void DeleteInterest(int interestId);
     }
