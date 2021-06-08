@@ -47,11 +47,11 @@ namespace Searchinator.Controllers
             return this.Ok(savedPerson);
         }
 
-        [Route("{searchInput}")]
+        [Route("search")]
         [HttpGet]
-        public IActionResult SearchPeople(string searchInput)
+        public IActionResult SearchPeople(string? searchInput)
         {
-            var people = this.personRepository.SearchPeople(searchInput);
+            var people = this.personRepository.SearchPeople(searchInput ?? string.Empty);
 
             return this.Ok(people);
         }
