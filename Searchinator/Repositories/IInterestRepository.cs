@@ -9,7 +9,7 @@ namespace Searchinator.Repositories
     {
         IList<Interest> GetInterestsForPerson(int personId);
 
-        IList<Interest> GetInterests();
+        IList<Interest> GetAllInterests();
 
         Interest SaveInterest(Interest interest);
 

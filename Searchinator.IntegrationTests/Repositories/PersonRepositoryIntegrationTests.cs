@@ -1,49 +1,17 @@
 namespace Searchinator.IntegrationTests.Repositories
 {
-    using System;
     using System.Collections.Generic;
-    using System.Linq;
 
     using AutoFixture;
 
     using FluentAssertions;
 
-    using Microsoft.Extensions.DependencyInjection;
-
     using NUnit.Framework;
 
-    using Searchinator.IntegrationTests.Customizations;
     using Searchinator.Models;
-    using Searchinator.Repositories;
 
     public class PersonRepositoryIntegrationTests : IntegrationTestBase
     {
-        protected IPersonRepository PersonRepository { get; private set; }
-
-        protected IInterestRepository InterestRepository { get; private set; }
-
-        [SetUp]
-        public void TestSetUp()
-        {
-            this.PersonRepository = this.ServiceProvider.GetRequiredService<IPersonRepository>();
-            this.InterestRepository = this.ServiceProvider.GetRequiredService<IInterestRepository>();
-            this.Fixture.Customize(new PersonCustomization()).Customize(new InterestCustomization());
-        }
-
-        [TearDown]
-        public void TestTearDown()
-        {
-            foreach (var interest in this.InterestRepository.GetInterests())
-            {
-                this.InterestRepository.DeleteInterest(interest.Id);
-            }
-
-            foreach (var person in this.PersonRepository.GetPeople())
-            {
-                this.PersonRepository.DeletePerson(person.Id);
-            }
-        }
-        
         [Test]
         public void ShouldGetAllPeople()
         {
@@ -113,7 +81,7 @@ namespace Searchinator.IntegrationTests.Repositories
         {
             // Arrange
             var peopleSeed = this.AddAndRetrievePeopleSeed();
-            this.AddInterestsForPeopleSeed(peopleSeed);
+            this.AddAndRetrieveInterestsForPeopleSeed(peopleSeed);
 
             // Act
             var searchResults = this.PersonRepository.SearchPeople("basketball");
@@ -132,8 +100,8 @@ namespace Searchinator.IntegrationTests.Repositories
             foreach (var interest in interests)
             {
                 interest.PersonId = savedPerson.Id;
+                this.InterestRepository.SaveInterest(interest);
             }
-            var savedInterests = interests.Select(this.InterestRepository.SaveInterest);
 
             // Act
             this.PersonRepository.DeletePerson(savedPerson.Id);
@@ -141,41 +109,6 @@ namespace Searchinator.IntegrationTests.Repositories
             // Assert
             this.InterestRepository.GetInterestsForPerson(savedPerson.Id).Should().BeEmpty();
             this.PersonRepository.GetPerson(savedPerson.Id).Should().BeNull();
-        }
-
-        private IReadOnlyCollection<Person> AddAndRetrievePeopleSeed()
-        {
-            var vivintSmartHomeArenaAddress = "301 S Temple, Salt Lake City, UT 84101";
-            var people = new List<Person>
-            {
-                new() { Name = "Donovan Mitchell", Age = 24, Address = vivintSmartHomeArenaAddress },
-                new() { Name = "Rudy Gobert", Age = 28, Address = vivintSmartHomeArenaAddress },
-                new() { Name = "Bojan Bogdanovic", Age = 32, Address = vivintSmartHomeArenaAddress },
-                new() { Name = "Mike Conley", Age = 33, Address = vivintSmartHomeArenaAddress },
-                new() { Name = "Royce O'Neale", Age = 28, Address = vivintSmartHomeArenaAddress }
-            };
-            var peopleWithIdsFromDatabase = people.Select(person => this.PersonRepository.SavePerson(person)).ToList();
-            return peopleWithIdsFromDatabase;
-        }
-
-        private void AddInterestsForPeopleSeed(IReadOnlyCollection<Person> people)
-        {
-            var basketballInterestDescription = "playing basketball";
-            var nbaFinalsInterestDescription = "winning the NBA finals";
-
-            foreach (var person in people)
-            {
-                var interestsToAdd = new List<Interest>
-                {
-                    new() { Description = basketballInterestDescription, PersonId = person.Id},
-                    new() { Description = nbaFinalsInterestDescription, PersonId = person.Id }
-                };
-
-                foreach (var interest in interestsToAdd)
-                {
-                    this.InterestRepository.SaveInterest(interest);
-                }
-            }
         }
     }
 }

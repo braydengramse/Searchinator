@@ -42,7 +42,7 @@ namespace Searchinator.Repositories
                 .ToList();
         }
 
-        public IList<Interest> GetInterests()
+        public IList<Interest> GetAllInterests()
         {
             using var context = this.searchinatorContextFactory.GetSearchinatorContext();
             return context.Interests.Include(i => i.PersonEntity).ToList().Select(this.ToModel).ToList();
