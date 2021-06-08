@@ -47,7 +47,7 @@ namespace Searchinator.Controllers
             return this.Ok(savedPerson);
         }
 
-        [Route("search/{searchInput}")]
+        [Route("{searchInput}")]
         [HttpGet]
         public IActionResult SearchPeople(string searchInput)
         {

@@ -49,17 +49,16 @@ namespace Searchinator.IntegrationTests.Repositories
             // Arrange
             var peopleSeed = this.AddAndRetrievePeopleSeed();
             var interestSeed = this.AddAndRetrieveInterestsForPeopleSeed(peopleSeed);
-            var personToDelete = peopleSeed.First();
-            this.PersonRepository.DeletePerson(personToDelete.Id);
+            var personWithNoMoreInterests = peopleSeed.First();
 
             // Act
-            foreach (var interestToDelete in interestSeed.Where(i => i.PersonId == personToDelete.Id))
+            foreach (var interestToDelete in interestSeed.Where(i => i.PersonId == personWithNoMoreInterests.Id))
             {
                 this.InterestRepository.DeleteInterest(interestToDelete.Id);
             }
 
             // Assert
-            this.InterestRepository.GetInterestsForPerson(personToDelete.Id).Should().BeEmpty();
+            this.InterestRepository.GetInterestsForPerson(personWithNoMoreInterests.Id).Should().BeEmpty();
         }
 
         [Test]
